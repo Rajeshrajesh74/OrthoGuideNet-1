@@ -1,0 +1,25 @@
+# data, cache and model weights (host these on Zenodo / Hugging Face instead)
+data/
+B0009/
+cache/
+outputs/
+*.npy
+*.pt
+*.pth
+
+# generated figures
+split_panels/
+uncertainty_only/
+
+# python / jupyter
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

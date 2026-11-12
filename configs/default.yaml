@@ -1,0 +1,47 @@
+# OrthoGuideNet default configuration.
+# Override paths from the command line, e.g.  --data-root /path/to/data --out-dir /path/to/outputs
+
+paths:
+  data_root: ./data            # folder containing the <sample>_ref directories
+  out_dir: ./outputs           # checkpoints, cache and figures are written here
+  cache_dir: null              # null -> <out_dir>/cache
+  checkpoint: orthoguidenet_v4.pt
+
+data:
+  downsample: 2                # spatial binning factor for the (large) cubes
+  patch: 128                   # training crop / tile size (divisible by 8)
+  train_frac: 0.6              # sample-level split; the remainder is the test set
+  val_frac: 0.2
+  savgol_window: 7             # spectral Savitzky-Golay smoothing
+  savgol_poly: 2
+
+# class ID = position in this list; colours are the RGB values used in the annotation PNGs
+classes:
+  - {name: Background, color: [169, 169, 172]}
+  - {name: Class_1,    color: [142, 223, 124]}
+  - {name: Class_2,    color: [243, 172,  99]}
+  - {name: Class_3,    color: [168, 109, 109]}
+  - {name: Class_4,    color: [245, 245,  63]}
+  - {name: Class_5,    color: [246,  58,  90]}
+  - {name: Class_6,    color: [111, 225, 243]}
+
+model:
+  k_bands: 32                  # bands kept by ASBS
+  embed_dim: 64
+  dropout: 0.2
+
+training:
+  seed: 42
+  batch_size: 8
+  epochs: 60
+  iters_per_epoch: 200
+  lr: 3.0e-4
+  weight_decay: 1.0e-2
+  boundary_lambda: 4.0         # extra weight on tissue interfaces in the segmentation loss
+
+inference:
+  stride: null                 # null -> patch // 2 (overlapping tiles)
+  tta: true                    # flip test-time augmentation
+  smooth_sigma: 1.5            # Gaussian smoothing of class probabilities
+  min_area: 100                # remove isolated regions smaller than this (pixels)
+  post_smooth_size: 15         # size of the uniform filter used for the "smoothed" prediction
